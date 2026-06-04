@@ -7,9 +7,9 @@ SAVE_DIR=/scratch/vy2142/cmtp_research/tempexps/
 mkdir -p "$SAVE_DIR"
 
 export WANDB_WATCH="gradients"
-export WANDB_ENTITY="vy2142-new-york-university"
+export WANDB_ENTITY=""
 export WANDB_MODE="online"
-export WANDB_PROJECT="latentexps"
+export WANDB_PROJECT=""
 
 # Model: meta-llama/Llama-3.2-1B-Instruct 
 # Use `mathllama` data_name
