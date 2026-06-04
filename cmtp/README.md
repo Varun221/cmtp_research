@@ -60,7 +60,7 @@ Random subsets of the structured and semi-natural datasets can be loaded by appe
 
 ## Training
 
-All scripts run from `cmtp_research/cmtp/`. Set `SAVE_DIR` and WandB env vars before running.
+All scripts run from `cmtp_research/cmtp/`. Each script starts with a hardcoded `cd` to the project directory and a `SAVE_DIR`. Also set the WandB env vars (or disable WandB).
 
 ### Step 1: Train a CoT teacher (Warmstart mode only)
 

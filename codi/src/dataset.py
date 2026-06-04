@@ -139,7 +139,6 @@ def preprocess(
 
     # breakpoint()
 
-
     answers_id = [
         torch.tensor(x.numpy().tolist() + [tokenizer.eos_token_id], dtype=torch.long)
         for x in answers_id
@@ -148,7 +147,7 @@ def preprocess(
     if _tokenizer_prepends_bos(cot_id, tokenizer.bos_token_id):
         cot_id = [x[1:] for x in cot_id]
         answers_id = [x[1:] for x in answers_id]
-    
+
     if training_args.add_thinktoken_in_ref:
         # add bot to source
         sources_id = [
@@ -170,7 +169,6 @@ def preprocess(
         z = x.clone()
         z[: len(y)] = -100
         ref_labels.append(z)
-
 
     if not training_args.add_thinktoken_in_ref:
         # add bot to source
@@ -222,7 +220,9 @@ class SupervisedDataset(Dataset):
         "\nAnswer the above question. Answer the final number directly in one number.\n"
     )
 
-    def __init__(self, data_args, raw_data, tokenizer, bot, eot, training_args, eval=False):
+    def __init__(
+        self, data_args, raw_data, tokenizer, bot, eot, training_args, eval=False
+    ):
         super(SupervisedDataset, self).__init__()
         logging.warning("Formatting inputs...")
 
@@ -313,7 +313,7 @@ class SupervisedDataset(Dataset):
                 questions.append(question)
                 cots.append(" ".join(cot))
                 answers.append(answer)
-            
+
             elif "math" in self.data_name:
 
                 # bad data
@@ -444,9 +444,9 @@ def create_data_module(
     )
 
     if tokenizer.pad_token_id is not None:
-        print('Removing existing pad token from tokenizer.')
+        print("Removing existing pad token from tokenizer.")
         tokenizer._pad_token = None
-    
+
     if len(tokenizer) < pad_token_id:
         num_gap = pad_token_id - len(tokenizer)
         print(f"Adding {num_gap} unused tokens to tokenizer.")
@@ -460,7 +460,9 @@ def create_data_module(
 
     if tokenizer.bos_token_id is None:
         tokenizer.bos_token_id = tokenizer.pad_token_id
-        print(f"Did not find bos_token_id. Setting bos_token_id to {tokenizer.bos_token_id}.")
+        print(
+            f"Did not find bos_token_id. Setting bos_token_id to {tokenizer.bos_token_id}."
+        )
 
     logging.warning("Processing data...")
     if data_args.data_name in DATA_PATHS:
@@ -470,7 +472,7 @@ def create_data_module(
 
         if data_args.train_path_override is not None:
             train_path = data_args.train_path_override
-        
+
         if data_args.eval_path_override is not None:
             eval_path = data_args.eval_path_override
 

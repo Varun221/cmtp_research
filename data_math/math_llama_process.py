@@ -40,7 +40,9 @@ OUT_DIR = os.path.join(_HERE, "..", "data_store", "math")
 
 def build_prompt(tokenizer, question: str) -> str:
     messages = [{"role": "user", "content": PROMPT_TEMPLATE.format(problem=question)}]
-    return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    return tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
 
 
 def has_boxed(text: str) -> bool:

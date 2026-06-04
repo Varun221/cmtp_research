@@ -2,6 +2,7 @@
 
 import sys
 import os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import time
@@ -10,8 +11,6 @@ import numpy as np
 from peft import LoraConfig, TaskType
 from src.model import TrainingModel, ModelArguments, TrainingArguments
 
-os.environ["HF_HOME"] = "/scratch/vy2142/hf_cache/"
-os.environ["TRANSFORMERS_CACHE"] = "/scratch/vy2142/hf_cache/"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # ---------- Args from training.sh ----------
@@ -47,7 +46,15 @@ lora_config = LoraConfig(
     r=model_args.lora_r,
     lora_alpha=model_args.lora_alpha,
     lora_dropout=0.1,
-    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj", "gate_proj"],
+    target_modules=[
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "up_proj",
+        "down_proj",
+        "gate_proj",
+    ],
     init_lora_weights=True,
 )
 
@@ -58,7 +65,9 @@ model = model.cuda().train()
 
 # ---------- Timing ----------
 BATCH_SIZE = 32
-SEQ_LENGTHS = [180,]
+SEQ_LENGTHS = [
+    180,
+]
 NUM_WARMUP = 5
 NUM_TRIALS = 20
 
@@ -76,10 +85,18 @@ for seq_len in SEQ_LENGTHS:
     ref_input_ids = torch.randint(0, vocab_size, (BATCH_SIZE, ref_len), device="cuda")
     labels = torch.randint(0, vocab_size, (BATCH_SIZE, a_len), device="cuda")
     ref_labels = torch.randint(0, vocab_size, (BATCH_SIZE, ref_len), device="cuda")
-    encoder_attention_mask = torch.ones(BATCH_SIZE, q_len, dtype=torch.long, device="cuda")
-    ref_attention_mask = torch.ones(BATCH_SIZE, ref_len, dtype=torch.long, device="cuda")
-    ref_answer_position = torch.full((BATCH_SIZE,), q_len + int(seq_len * 0.3), dtype=torch.long, device="cuda")  # answer starts after question+cot in ref
-    model_answer_position = torch.zeros(BATCH_SIZE, dtype=torch.long, device="cuda")  # first position in decoder
+    encoder_attention_mask = torch.ones(
+        BATCH_SIZE, q_len, dtype=torch.long, device="cuda"
+    )
+    ref_attention_mask = torch.ones(
+        BATCH_SIZE, ref_len, dtype=torch.long, device="cuda"
+    )
+    ref_answer_position = torch.full(
+        (BATCH_SIZE,), q_len + int(seq_len * 0.3), dtype=torch.long, device="cuda"
+    )  # answer starts after question+cot in ref
+    model_answer_position = torch.zeros(
+        BATCH_SIZE, dtype=torch.long, device="cuda"
+    )  # first position in decoder
 
     # Warmup
     print(f"\nSeq length {seq_len}: warming up ({NUM_WARMUP} iters)...")

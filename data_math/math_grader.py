@@ -6,7 +6,6 @@ import sympy
 from pylatexenc import latex2text
 from sympy.parsing import sympy_parser
 
-
 BAD_SUBSTRINGS = ["^{", "^("]
 BAD_REGEXES = [r"\^[0-9]+\^", r"\^[0-9][0-9]+"]
 TUPLE_CHARS = "()[]"
@@ -212,8 +211,22 @@ def _normalize(expr: str) -> Optional[str]:
     expr = expr.replace("billion", "*10^9")
     expr = expr.replace("trillion", "*10^12")
     for unit in [
-        "degree", "cm", "centimeter", "meter", "mile", "second", "minute",
-        "hour", "day", "week", "month", "year", "foot", "feet", "inch", "yard",
+        "degree",
+        "cm",
+        "centimeter",
+        "meter",
+        "mile",
+        "second",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year",
+        "foot",
+        "feet",
+        "inch",
+        "yard",
     ]:
         expr = re.sub(f"{unit}(es)?(s)? *(\^[0-9]+)?", "", expr)
     expr = re.sub(r"\^ *\\circ", "", expr)
@@ -306,7 +319,9 @@ def grade_answer(given_answer: str, ground_truth: str) -> bool:
     gt_elems = split_tuple(gt_norm)
     given_elems = split_tuple(given_norm)
 
-    if len(gt_elems) > 1 and (gt_norm[0] != given_norm[0] or gt_norm[-1] != given_norm[-1]):
+    if len(gt_elems) > 1 and (
+        gt_norm[0] != given_norm[0] or gt_norm[-1] != given_norm[-1]
+    ):
         return False
     if len(gt_elems) != len(given_elems):
         return False

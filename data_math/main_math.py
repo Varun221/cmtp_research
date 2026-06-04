@@ -44,7 +44,9 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_MODEL)
 
     def token_count(row):
-        return len(tokenizer.encode(row["problem"] + row["solution"] + row["answer"])) + 10
+        return (
+            len(tokenizer.encode(row["problem"] + row["solution"] + row["answer"])) + 10
+        )
 
     traindf["token_count"] = traindf.apply(token_count, axis=1)
     traindf = traindf[traindf["token_count"] <= MAX_TOKENS].reset_index(drop=True)

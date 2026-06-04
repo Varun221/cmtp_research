@@ -25,7 +25,9 @@ save_name = f"generations_{evalname}.txt"
 mtp_dumps = [json.load(open(p)) for p in mtp_paths]
 cot_dump = json.load(open(cot_path))
 
-print(f"CoT accuracy: {cot_dump['accuracy']*100:.2f}% ({len(cot_dump['records'])} records)")
+print(
+    f"CoT accuracy: {cot_dump['accuracy']*100:.2f}% ({len(cot_dump['records'])} records)"
+)
 for label, d in zip(mtp_labels, mtp_dumps):
     print(f"{label} accuracy: {d['accuracy']*100:.2f}% ({len(d['records'])} records)")
 

@@ -22,6 +22,10 @@ from src.model import TrainingModel, TrainingArguments, DataArguments, ModelArgu
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 from scripts.math_grader import grade_answer
 
+# Path to the locally-prepared GSM8k-Aug validation file (see data_gsm/README.md).
+# Update this to point at your own data_store after preparing the data.
+EVAL_PATH = "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
+
 
 @dataclass
 class EvalArguments:
@@ -373,24 +377,28 @@ def main(model_args, data_args, training_args, eval_args):
                 ans_pred_list.append(ans_pred)
                 if dump:
                     idx = step * data_args.batch_size + mini_step
-                    dump_records.append({
-                        "idx": idx,
-                        "question": question[idx],
-                        "mtp_think_tokens": mtp_think_tokens[mini_step],
-                        "mtp_think_tokens_decoded": [
-                            [
-                                tokenizer.decode(tok, skip_special_tokens=False)
-                                for tok in step_toks
-                            ]
-                            for step_toks in mtp_think_tokens[mini_step]
-                        ],
-                        "pred_tokens": pred_token,
-                        "pred_decoded": decoded_pred,
-                        "extracted_answer": ans_pred,
-                        "ground_truth": answer[idx],
-                        "think_count": think_count[mini_step].item(),
-                        "finished_thinking": bool(finished_thinking[mini_step].item()),
-                    })
+                    dump_records.append(
+                        {
+                            "idx": idx,
+                            "question": question[idx],
+                            "mtp_think_tokens": mtp_think_tokens[mini_step],
+                            "mtp_think_tokens_decoded": [
+                                [
+                                    tokenizer.decode(tok, skip_special_tokens=False)
+                                    for tok in step_toks
+                                ]
+                                for step_toks in mtp_think_tokens[mini_step]
+                            ],
+                            "pred_tokens": pred_token,
+                            "pred_decoded": decoded_pred,
+                            "extracted_answer": ans_pred,
+                            "ground_truth": answer[idx],
+                            "think_count": think_count[mini_step].item(),
+                            "finished_thinking": bool(
+                                finished_thinking[mini_step].item()
+                            ),
+                        }
+                    )
                 if verbose:
                     idx = step * data_args.batch_size + mini_step
                     print(f"\n--- Example {idx} ---", flush=True)
@@ -448,9 +456,7 @@ def main(model_args, data_args, training_args, eval_args):
     for ev in evlist.split(","):
         if ev == "gsm8k-val":
             print("=== GSM8k-val ===")
-            dataset_to_eval = read_json(
-                "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
-            )
+            dataset_to_eval = read_json(EVAL_PATH)
             q_key, a_key = "question", "answer"
         elif ev == "gsm8k-test":
             print("=== GSM8k-test ===")

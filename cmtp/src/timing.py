@@ -2,16 +2,17 @@
 
 import sys
 import os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import time
 import torch
+
 torch._dynamo.config.capture_scalar_outputs = True
 import numpy as np
 from peft import LoraConfig, TaskType
 from src.model import TrainingModel, ModelArguments, TrainingArguments
 from src.utils import equal_segmentation
-
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -47,7 +48,15 @@ lora_config = LoraConfig(
     r=model_args.lora_r,
     lora_alpha=model_args.lora_alpha,
     lora_dropout=0.1,
-    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj", "gate_proj"],
+    target_modules=[
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "up_proj",
+        "down_proj",
+        "gate_proj",
+    ],
     init_lora_weights=True,
 )
 
@@ -63,7 +72,9 @@ mot_id = model.mot_id
 
 # Config params. See paper for exact setup.
 BATCH_SIZE = 32
-SEQ_LENGTHS = [180,]
+SEQ_LENGTHS = [
+    180,
+]
 NUM_WARMUP = 5
 NUM_TRIALS = 20
 
@@ -74,24 +85,45 @@ for seq_len in SEQ_LENGTHS:
     cot_len = seq_len - q_len - a_len - 2  # -2 for bot/eot added by equal_segmentation
 
     # Build span_segment_ids using equal_segmentation
-    dummy_cot = [list(range(cot_len))]  # single-sample list of token ids (values don't matter)
+    dummy_cot = [
+        list(range(cot_len))
+    ]  # single-sample list of token ids (values don't matter)
     _, persample_spanids = equal_segmentation(
-        cot_id=dummy_cot, bot_id=bot_id, eot_id=eot_id, mot_id=mot_id, span_length=SPAN_LENGTH,
+        cot_id=dummy_cot,
+        bot_id=bot_id,
+        eot_id=eot_id,
+        mot_id=mot_id,
+        span_length=SPAN_LENGTH,
     )
     # persample_spanids[0] includes [0] + span_ids + [0] for bot/eot
     span_ids = [0] * q_len + persample_spanids[0] + [0] * a_len
     actual_len = len(span_ids)
 
     # Dummy tensors
-    ref_input_ids = torch.randint(0, vocab_size, (BATCH_SIZE, actual_len), device="cuda")
-    ref_attention_mask = torch.ones(BATCH_SIZE, actual_len, dtype=torch.long, device="cuda")
+    ref_input_ids = torch.randint(
+        0, vocab_size, (BATCH_SIZE, actual_len), device="cuda"
+    )
+    ref_attention_mask = torch.ones(
+        BATCH_SIZE, actual_len, dtype=torch.long, device="cuda"
+    )
     loss_masks = torch.zeros(BATCH_SIZE, actual_len, dtype=torch.long, device="cuda")
     loss_masks[:, q_len:] = 1  # loss on cot + answer
-    span_segment_ids = torch.tensor(span_ids, dtype=torch.long, device="cuda").unsqueeze(0).expand(BATCH_SIZE, -1)
-    ref_answer_position = torch.full((BATCH_SIZE,), q_len + len(persample_spanids[0]), dtype=torch.long, device="cuda")
+    span_segment_ids = (
+        torch.tensor(span_ids, dtype=torch.long, device="cuda")
+        .unsqueeze(0)
+        .expand(BATCH_SIZE, -1)
+    )
+    ref_answer_position = torch.full(
+        (BATCH_SIZE,),
+        q_len + len(persample_spanids[0]),
+        dtype=torch.long,
+        device="cuda",
+    )
 
     # Warmup
-    print(f"\nSeq length {actual_len} (target {seq_len}): warming up ({NUM_WARMUP} iters)...")
+    print(
+        f"\nSeq length {actual_len} (target {seq_len}): warming up ({NUM_WARMUP} iters)..."
+    )
     for _ in range(NUM_WARMUP):
         with torch.amp.autocast("cuda", dtype=torch.bfloat16):
             output = model(

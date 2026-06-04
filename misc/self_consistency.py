@@ -30,7 +30,9 @@ save_name = f"self_consistency_{evalname}.txt"
 mtp_dumps = [json.load(open(p)) for p in mtp_paths]
 cot_dump = json.load(open(cot_path))
 
-print(f"CoT accuracy: {cot_dump['accuracy']*100:.2f}% ({len(cot_dump['records'])} records)")
+print(
+    f"CoT accuracy: {cot_dump['accuracy']*100:.2f}% ({len(cot_dump['records'])} records)"
+)
 for label, d in zip(mtp_labels, mtp_dumps):
     print(f"{label} accuracy: {d['accuracy']*100:.2f}% ({len(d['records'])} records)")
 
@@ -162,16 +164,20 @@ def analysis_step_consistency_simple(samples, max_pos=7):
             pos_ns.append(len(vals))
 
         print(
-            f"{model:<8}"
-            + "".join(f"  {a:.2f}({n})" for a, n in zip(pos_avgs, pos_ns))
+            f"{model:<8}" + "".join(f"  {a:.2f}({n})" for a, n in zip(pos_avgs, pos_ns))
         )
 
         xs = [i for i, n in enumerate(pos_ns) if n >= 5]
         ys = [pos_avgs[i] for i in xs]
         if xs:
             ax.plot(
-                xs, ys, marker="o", label=model,
-                color=colors.get(model, "gray"), linewidth=2, markersize=5,
+                xs,
+                ys,
+                marker="o",
+                label=model,
+                color=colors.get(model, "gray"),
+                linewidth=2,
+                markersize=5,
             )
 
     ax.set_xlabel("Step position")

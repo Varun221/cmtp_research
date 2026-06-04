@@ -198,8 +198,6 @@ class TrainingArguments(transformers.TrainingArguments):
     )
 
 
-
-
 def print_trainable_parameters(model):
     trainable_parameters = 0
     all_param = 0

@@ -1,4 +1,5 @@
 """Main training script. See scripts/ for launching examples."""
+
 import os
 import gc
 import torch
@@ -22,8 +23,8 @@ from src import utils
 torch._dynamo.config.capture_scalar_outputs = True
 
 
-
 device_str = "cuda" if torch.cuda.is_available() else "cpu"
+
 
 def _to_scalar(x):
     """Convert Tensor/number/None to python float (mean-reduced if needed)."""
@@ -82,7 +83,11 @@ class CustomTrainer(Trainer):
         loss = outputs["loss"]
         if step % self.args.logging_steps == 0:
             logs = {
-                **{k: _to_scalar(v) for k, v in outputs["metrics"].items() if k != "loss"},
+                **{
+                    k: _to_scalar(v)
+                    for k, v in outputs["metrics"].items()
+                    if k != "loss"
+                },
             }
             if not hasattr(self, "is_global_zero") or self.is_global_zero:
                 self.log(logs)
@@ -109,12 +114,12 @@ class CustomTrainer(Trainer):
             inputs = self._prepare_inputs(inputs)
             inputs["step"] = self.state.global_step
             inputs["step_ratio"] = 1.0
-            
+
             with torch.no_grad():
                 with autocast(dtype=torch.bfloat16, device_type=device_str):
                     outputs = model(**inputs)
 
-            for k, v in outputs['metrics'].items():
+            for k, v in outputs["metrics"].items():
                 if isinstance(v, torch.Tensor):
                     v_detached = v.detach()
                     if k not in accumulated_metrics:

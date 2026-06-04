@@ -28,6 +28,9 @@ from scripts.math_grader import grade_answer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Path to the locally-prepared GSM8k-Aug validation file (see data_gsm/README.md).
+# Update this to point at your own data_store after preparing the data.
+EVAL_PATH = "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
 
 do_print = False
 
@@ -137,9 +140,7 @@ def run_eval(model, tokenizer, model_args, data_args, training_args, data_name):
         dataset = load_dataset("gsm8k", "main")
         test_set = dataset["test"]
     elif "gsm8k-val" == data_name:
-        test_set = read_json(
-            "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
-        )
+        test_set = read_json(EVAL_PATH)
     elif data_name.endswith(".json"):
         test_set = read_json(data_name)
     else:

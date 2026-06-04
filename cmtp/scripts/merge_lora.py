@@ -5,7 +5,6 @@ same setup as train.py, then saves the merged model to the specified output dir.
 Usage: See merge_lora.sh for launch.
 """
 
-
 import os
 import torch
 import transformers
@@ -13,6 +12,7 @@ from peft import LoraConfig, TaskType
 
 # Add cmtp directory.
 import sys
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.model import (
     TrainingModel,
@@ -45,7 +45,7 @@ def pop_arg(argv, flag):
     if flag in argv:
         idx = argv.index(flag)
         value = argv[idx + 1]
-        return value, argv[:idx] + argv[idx + 2:]
+        return value, argv[:idx] + argv[idx + 2 :]
     return None, argv
 
 
@@ -65,14 +65,30 @@ def merge():
 
     if model_args.lora_init:
         task_type = TaskType.CAUSAL_LM
-        if any(name in model_args.model_name_or_path.lower() for name in ["llama", "mistral", "falcon", "qwen"]):
-            target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj", "gate_proj"]
+        if any(
+            name in model_args.model_name_or_path.lower()
+            for name in ["llama", "mistral", "falcon", "qwen"]
+        ):
+            target_modules = [
+                "q_proj",
+                "k_proj",
+                "v_proj",
+                "o_proj",
+                "up_proj",
+                "down_proj",
+                "gate_proj",
+            ]
         elif any(name in model_args.model_name_or_path.lower() for name in ["phi"]):
             target_modules = ["q_proj", "k_proj", "v_proj", "dense", "fc1", "fc2"]
-        elif any(name in model_args.model_name_or_path.lower() for name in ["gpt2", "gsm-cot"]):
+        elif any(
+            name in model_args.model_name_or_path.lower()
+            for name in ["gpt2", "gsm-cot"]
+        ):
             target_modules = ["c_attn", "c_proj", "c_fc"]
         else:
-            raise ValueError(f"Only support LLAMA, Mistral, Falcon, Phi-2, but got {model_args.model_name_or_path}.")
+            raise ValueError(
+                f"Only support LLAMA, Mistral, Falcon, Phi-2, but got {model_args.model_name_or_path}."
+            )
 
         lora_config = LoraConfig(
             task_type=task_type,
@@ -85,7 +101,6 @@ def merge():
         )
     else:
         lora_config = None
-
 
     model = TrainingModel(model_args, training_args, lora_config)
 

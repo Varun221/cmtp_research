@@ -14,7 +14,9 @@ import re
 from transformers import AutoTokenizer
 
 MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
-SYSTEM_PROMPT = "Please reason step by step, and put your final answer within \\boxed{}."
+SYSTEM_PROMPT = (
+    "Please reason step by step, and put your final answer within \\boxed{}."
+)
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 INFER_TRAIN_PATH = os.path.join(_HERE, "mathinfer_outputs", "qwen_train.json")
@@ -27,7 +29,9 @@ def build_prompt(tokenizer, question: str) -> str:
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": question},
     ]
-    return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    return tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
 
 
 def has_boxed(text: str) -> bool:

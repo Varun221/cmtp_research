@@ -30,6 +30,10 @@ from src.model import (
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 from scripts.math_grader import grade_answer
 
+# Path to the locally-prepared GSM8k-Aug validation file (see data_gsm/README.md).
+# Update this to point at your own data_store after preparing the data.
+EVAL_PATH = "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
+
 do_print = False
 DUMP = False
 
@@ -142,9 +146,7 @@ def evaluation(model_args, data_args, training_args):
         dataset = load_dataset("gsm8k", "main")
         test_set = dataset["test"]
     elif "gsm8k-val" == data_args.data_name:
-        test_set = read_json(
-            "/scratch/vy2142/cmtp_research/data_store/gsm8kaug_val.json"
-        )
+        test_set = read_json(EVAL_PATH)
     elif ".json" in data_args.data_name:
         test_set = read_json(data_args.data_name)
     else:
@@ -341,25 +343,31 @@ def evaluation(model_args, data_args, training_args):
                     decoded_pred_clean = tokenizer.decode(
                         pred_token, skip_special_tokens=True
                     )
-                    dump_records.append({
-                        "idx": idx,
-                        "question": question[idx],
-                        "pred_tokens": pred_token,
-                        "pred_tokens_decoded": [
-                            tokenizer.decode([tok], skip_special_tokens=False)
-                            for tok in pred_token
-                        ],
-                        "pred_decoded": decoded_pred,
-                        "pred_decoded_clean": decoded_pred_clean,
-                        "extracted_answer": ans_pred_list[-1],
-                        "ground_truth": answer[idx],
-                        "len_cot": pred_token.index(eot_id) + 1
-                        if eot_id in pred_token
-                        else None,
-                        "len_ans": pred_token.index(tokenizer.eos_token_id) + 1
-                        if tokenizer.eos_token_id in pred_token
-                        else None,
-                    })
+                    dump_records.append(
+                        {
+                            "idx": idx,
+                            "question": question[idx],
+                            "pred_tokens": pred_token,
+                            "pred_tokens_decoded": [
+                                tokenizer.decode([tok], skip_special_tokens=False)
+                                for tok in pred_token
+                            ],
+                            "pred_decoded": decoded_pred,
+                            "pred_decoded_clean": decoded_pred_clean,
+                            "extracted_answer": ans_pred_list[-1],
+                            "ground_truth": answer[idx],
+                            "len_cot": (
+                                pred_token.index(eot_id) + 1
+                                if eot_id in pred_token
+                                else None
+                            ),
+                            "len_ans": (
+                                pred_token.index(tokenizer.eos_token_id) + 1
+                                if tokenizer.eos_token_id in pred_token
+                                else None
+                            ),
+                        }
+                    )
 
     accuracy = compute_accuracy(answer, ans_pred_list)
 

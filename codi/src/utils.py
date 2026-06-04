@@ -81,7 +81,3 @@ if __name__ == "__main__":
     codesnapshot = get_encoded_files(project_dir)
     print(codesnapshot[:100])  # Print first 100 characters
     print(sys.getsizeof(codesnapshot) / 1e3)  # Print size in KB
-
-    
-
-

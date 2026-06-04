@@ -62,6 +62,8 @@ Three levels of CoT trace difficulty are used. See [data_gsm/README.md](data_gsm
 
 See Table 7 in paper for examples for each type.
 
+The data paths are hardcoded to a local `data_store/`. Once you have created the data files, update them to your own locations: the training/eval paths in the `get_data_paths` function in each project's `src/dataset.py`, and the `EVAL_PATH` constant near the top of the `test*.py` evaluation scripts.
+
 
 
 ## Running
