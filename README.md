@@ -10,6 +10,8 @@ Paper Link: [Arxiv]()
 
 ![Main Results](assets/mainplot.png)
 
+Head-to-Head comparison of standard CoT finetuning with two regimes of ContinuousCoT training: **Direct Supervision** (C-MTP-2) and **Indirect Supervision** (CODI) across three CoT trace difficulties. *Structured* consists of compact mathematical expressions of ~25 steps, *Semi-Natural* contains sentence per-step explanations of ~25 steps while *Realistic* LLM-generated traces contain ~350 steps on average. Both regimes remain competitive with CoT-SFT on structured/semi-natural traces but collapse to ~28% of its accuracy on realistic traces. Numbers above bars indicate mean reasoning trace length per method.
+
 | Trace type | Dataset | Best method |
 |---|---|---|
 | Structured (compact expressions) | GSM8k-Aug | Direct (C-MTP) — more efficient, better generalization |
