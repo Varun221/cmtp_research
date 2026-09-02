@@ -1,8 +1,9 @@
 # Training Continuous Chain of Thought Models: A Tale of Two Regimes
 
-[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)]() &nbsp;
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)](https://arxiv.org/abs/2607.16972) &nbsp;
 [![OpenReview](https://img.shields.io/badge/OpenReview-Forum-8c1b13.svg)](https://openreview.net/forum?id=ofq7HnlZjs) &nbsp;
-[![Poster](https://img.shields.io/badge/Poster-View-1081c2.svg)](https://github.com/Varun221/cmtp_research/blob/main/assets/poster_fin.pdf)
+[![Poster](https://img.shields.io/badge/Poster-View-1081c2.svg)](https://github.com/Varun221/cmtp_research/blob/main/assets/poster_fin.pdf) &nbsp;
+[![HF](https://img.shields.io/badge/Hugging%20Face-Checkpoints-FFD21E.svg)](https://huggingface.co/varuny/CMTP)
 
 # Abstract
 > Continuous Chain-of-Thought methods replace verbose reasoning traces with a short sequence of dense latent representations. Earlier continuous CoT methods indirectly supervise the latent representations such that its final state match that of verbose reasoning traces, requiring autoregressive, slow generation during training. We introduce C-MTP, a simpler, faster direct supervision approach that models each latent as an average of the embeddings in the CoT traces to be compressed. Our approach outperforms a prior direct supervision method that approximates the distribution of compressed tokens, and performs competitively to slower indirect supervision approaches in existing evaluation setup with simplified CoT traces (less than 100 tokens). Lastly, we extend the evaluation of Continuous CoT methods to complex tasks with longer reasoning traces (> few hundreds reasoning tokens). We find both direct and indirect supervision training methods perform poorly (roughly 65\% performance drop) in this setting, revealing the limitations of current continuous CoT methods.
@@ -20,11 +21,6 @@ Head-to-Head comparison of standard CoT finetuning with two ContinuousCoT traini
 | Semi-Natural (verbose text traces) | GSM8k-Aug-NL | Indirect (CODI) — recurrent objective handles long traces better |
 | Realistic (LLM-generated traces) | MATH | Both underperform standard CoT fine-tuning |
 
-## Todo for Repo
-
-- [ ] Upload checkpoints for cot, cmtp and codi.
-- [ ] Add arXiv paper link
-- [ ] Fill in the citation
 
 
 ## Repository Structure
@@ -89,4 +85,15 @@ This codebase builds on [CODI](https://github.com/zhenyi4/codi). The baseline ex
 
 
 ## Citation
+```
+@inproceedings{
+  yerram2026training,
+  title={Training Continuous Chain of Thought Models: A Tale of Two Regimes},
+  author={Varun Yerram and He He and Eunsol Choi},
+  booktitle={AdaptFM: Resource-Adaptive Foundation Model Inference},
+  year={2026},
+  url={https://openreview.net/forum?id=ofq7HnlZjs}
+}
+```
+
 
