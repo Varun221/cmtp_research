@@ -1,7 +1,7 @@
 # Training Continuous Chain of Thought Models: A Tale of Two Regimes
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)](https://arxiv.org/abs/2607.16972) &nbsp;
-[![OpenReview](https://img.shields.io/badge/OpenReview-Forum-8c1b13.svg)](https://openreview.net/forum?id=ofq7HnlZjs) &nbsp;
+[![OpenReview](https://img.shields.io/badge/OpenReview-Forum-8c1b13.svg)](https://openreview.net/forum?id=yz4LDTmIOD) &nbsp;
 [![Poster](https://img.shields.io/badge/Poster-View-1081c2.svg)](https://github.com/Varun221/cmtp_research/blob/main/assets/poster_fin.pdf) &nbsp;
 [![HF](https://img.shields.io/badge/Hugging%20Face-Checkpoints-FFD21E.svg)](https://huggingface.co/varuny/CMTP)
 
