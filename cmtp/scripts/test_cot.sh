@@ -18,6 +18,15 @@ BATCH_SIZE=4
 # BATCH_SIZE=4
 
 
+## Realistic GSM8k-Aug (chat-templated eval jsons from data_math/gsm_process.py)
+
+# Llama
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/cot/gsmrealistic_llama_10ep"
+# datasets=("/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json" "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json" "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json" "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json")
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# BATCH_SIZE=16
+
+
 ## Semi-Natural - GSM8k-Aug-NL
 
 # Llama
@@ -57,8 +66,8 @@ run_experiment() {
         --max_token_num 2048 \
         --bf16 \
         --batch_size $BATCH_SIZE \
-        --greedy True \
-        --inf_num_iterations 1 \
+        --greedy False \
+        --inf_num_iterations 5 \
         --ckpt_dir "$CKPT"
 }
 

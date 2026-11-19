@@ -1,1 +1,7 @@
 __pycache__
+data_store/
+*slurm_scripts*
+wandb
+tempexps
+*rebuttal*
+plan.out

@@ -37,10 +37,17 @@ icot-randsubset-xk ; x=12, 25, 50, 60, 70, 88, 100, 120, 150, 200, 250, 300, 350
 icot-nl-randsubset-xk ; x=12, 25, 50, 60, 70, 88, 100, 120, 150, 200, 250, 300, 350
 mathllama
 mathqwen
+gsmllama
 """
 
 
 def get_data_paths(data_name):
+
+    if "gsmllama" in data_name:
+        return (
+            "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_train_correct.json",
+            "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_val.json",
+        )
 
     if "mathllama" in data_name:
         return (
@@ -297,7 +304,7 @@ class SupervisedDataset(Dataset):
 
                 answers.append(answer)
 
-            elif "math" in data_name:
+            elif "math" in data_name or "gsmllama" in data_name:
 
                 question = example["question"]
 

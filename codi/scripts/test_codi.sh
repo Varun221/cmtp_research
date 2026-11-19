@@ -2,7 +2,7 @@
 
 cd /scratch/vy2142/cmtp_research/codi
 
-NUM_TIMES=1
+NUM_TIMES=5
 
 
 ## Realistic - MATH
@@ -47,6 +47,29 @@ NUM_TIMES=1
 # INF_LATENT=20
 # MODEL_NAME="Qwen/Qwen2.5-1.5B-Instruct"
 # EVLIST="/scratch/vy2142/cmtp_research/data_store/math/qwen_test.json"
+# BATCH_SIZE=16
+
+## Realistic GSM8k-Aug (chat-templated eval jsons from data_math/gsm_process.py)
+
+# Llama - codi6
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/codi/gsmrealistic_llama_codi6"
+# INF_LATENT=6
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
+# BATCH_SIZE=16
+
+# Llama - codi10
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/codi/gsmrealistic_llama_codi10"
+# INF_LATENT=10
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
+# BATCH_SIZE=16
+
+# Llama - codi20
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/codi/gsmrealistic_llama_codi20"
+# INF_LATENT=20
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
 # BATCH_SIZE=16
 
 ## Semi-Natural - GSM8k-Aug-NL

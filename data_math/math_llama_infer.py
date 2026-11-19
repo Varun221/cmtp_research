@@ -50,9 +50,9 @@ PROMPT_TEMPLATE = (
 )
 
 
-def load_data(path: str):
+def load_data(path: str, max_limit: int | None = None):
     with open(path) as f:
-        data = json.load(f)
+        data = json.load(f)[:max_limit]
     return data
 
 
@@ -105,6 +105,7 @@ def main():
     parser.add_argument("--one-prompt", action="store_true")
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--max-new-tokens", type=int, default=5120)
+    parser.add_argument("--max-limit", type=int, default=None, help="Max number of samples to load from data")
     parser.add_argument("--output", default=None, help="Path to save results JSON")
     args = parser.parse_args()
 
@@ -129,7 +130,7 @@ def main():
     )
 
     print(f"Loading data: {args.data}")
-    data = load_data(args.data)
+    data = load_data(args.data, max_limit=args.max_limit)
     print(f"Samples: {len(data)}")
 
     prompts = [build_prompt(tokenizer, item["question"]) for item in data]

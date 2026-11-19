@@ -3,7 +3,7 @@
 cd /scratch/vy2142/cmtp_research/cmtp
 
 
-NUM_TIMES=1
+NUM_TIMES=5
 
 
 ## Realistic - MATH
@@ -23,6 +23,33 @@ BATCH_SIZE=1
 # EVLIST="/scratch/vy2142/cmtp_research/data_store/math/qwen_test.json"
 # MAX_TOKENS=2080
 # BATCH_SIZE=1
+
+
+## Realistic GSM8k-Aug (chat-templated eval jsons from data_math/gsm_process.py)
+
+# Llama - span 2
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/cmtp/gsmrealistic_llama_sp2mtp"
+# SPAN_LENGTH=2
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
+# MAX_TOKENS=1000
+# BATCH_SIZE=16
+
+# Llama - span 3
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/cmtp/gsmrealistic_llama_sp3mtp"
+# SPAN_LENGTH=3
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
+# MAX_TOKENS=1000
+# BATCH_SIZE=16
+
+# Llama - span 4
+# CKPT="/scratch/vy2142/cmtp_research_extra/ckpts/cmtp/gsmrealistic_llama_sp4mtp"
+# SPAN_LENGTH=4
+# MODEL_NAME="meta-llama/Llama-3.2-1B-Instruct"
+# EVLIST="/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-test.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_gsm8k-hard.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_multi-arith.json,/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_svamp.json"
+# MAX_TOKENS=1000
+# BATCH_SIZE=16
 
 
 ## Semi-Natural - GSM8k-Aug-NL
@@ -114,8 +141,8 @@ python test_mtp.py \
     --lora_r 128 --lora_alpha 32 --lora_init \
     --span_length "$SPAN_LENGTH" \
     --max_token_num "$MAX_TOKENS" \
-    --greedy True \
-    --sample_mtp False \
+    --greedy False \
+    --sample_mtp True \
     --inf_num_iterations "$NUM_TIMES" \
     --batch_size "$BATCH_SIZE" \
     --output_dir "$CKPT" \

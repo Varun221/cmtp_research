@@ -1,4 +1,7 @@
-"""Time the forward pass of TrainingModel for different sequence lengths."""
+"""Time the forward+backward pass of TrainingModel for different sequence lengths.
+
+The measured times are the codi_ms column in the cmtp/src/timing.py docstring.
+"""
 
 import sys
 import os
@@ -15,12 +18,11 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # ---------- Args from training.sh ----------
 model_args = ModelArguments(
-    # model_name_or_path="meta-llama/Llama-3.2-3B-Instruct",
-    model_name_or_path="Qwen/Qwen2.5-1.5B-Instruct",
+    model_name_or_path="meta-llama/Llama-3.2-1B-Instruct",
+    # model_name_or_path="Qwen/Qwen2.5-1.5B-Instruct",
     lora_r=128,
     lora_alpha=32,
     lora_init=True,
-    full_precision=True,
     train=False,  # skip init (no checkpoint to restore)
 )
 
@@ -64,7 +66,7 @@ model = TrainingModel(model_args, training_args, lora_config)
 model = model.cuda().train()
 
 # ---------- Timing ----------
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 SEQ_LENGTHS = [
     180,
 ]

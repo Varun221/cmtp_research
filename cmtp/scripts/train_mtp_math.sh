@@ -27,9 +27,13 @@ QwenMATH_COT_CKPT="/scratch/vy2142/cmtp_research/hf_upload/ckpts/cot/realistic_q
 # Use `mathllama` data_name
 # Use L1BMATH_COT_CKPT for textcot_teacher_ckpt
 
-# Model: Qwen/Qwen2.5-1.5B-Instruct 
+# Model: Qwen/Qwen2.5-1.5B-Instruct
 # Use `mathqwen` data_name
 # Use QwenMATH_COT_CKPT for textcot_teacher_ckpt
+
+# LLM-trace GSM8k-Aug (data prepared via data_math/gsm_process.py), Llama only:
+# --data_name gsmllama, --max_token_num 768, teacher = GSM Llama CoT merged ckpt
+# 206,701 train samples. Multitask mode needs no teacher.
 
 python train.py \
 	--output_dir "$SAVE_DIR" \

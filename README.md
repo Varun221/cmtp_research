@@ -57,10 +57,11 @@ Three levels of CoT trace difficulty are used. See [data_gsm/README.md](data_gsm
 | Structured | GSM8k-Aug (arithmetic expressions) | `icot` |
 | Semi-Natural | GSM8k-Aug-NL (text traces) | `icot-nl` |
 | Realistic | MATH (LLM-generated traces) | `mathllama` / `mathqwen` |
+| Realistic-GSM | GSM8k-Aug (Llama-generated traces) | `gsmllama` |
 
 See Table 7 in paper for examples for each type.
 
-The data paths are hardcoded to a local `data_store/`. Once you have created the data files, update them to your own locations: the training/eval paths in the `get_data_paths` function in each project's `src/dataset.py`, and the `EVAL_PATH` constant near the top of the `test*.py` evaluation scripts.
+The data paths are hardcoded to a local `data_store/`. Once you have created the data files, update them to your own locations: the training/eval paths in the `get_data_paths` function in each project's `src/dataset.py`, and the `EVAL_PATH` constant near the top of the `test*.py` evaluation scripts. The LLM-trace GSM data (`gsmllama`) lives under `data_store/gsmllm/`.
 
 
 

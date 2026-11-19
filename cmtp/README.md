@@ -53,6 +53,7 @@ Supported `data_name` values:
 |---|---|
 | `icot` | Full structured dataset (GSM8k-Aug expressions) |
 | `icot-nl` | Full semi-natural dataset (GSM8k-Aug-NL) |
+| `gsmllama` | LLM-trace GSM8k-Aug: Llama CoT generations with Llama chat template |
 | `mathllama` | Realistic Llama CoT generations with Llama chat template |
 | `mathqwen` | Realistic Qwen CoT generations with Qwen chat template |
 

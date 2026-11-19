@@ -38,3 +38,43 @@ Parses each `<<lhs=rhs>>` arithmetic step out of the think text, checks whether 
 ```bash
 python self_consistency.py
 ```
+
+
+### Gold-trace prefill
+
+We feed `x` fraction of a gold reasoning trace to the model as its thinking prefix and let the model generate rest of the trace along with the final answer. We measure accuracy, sweeping `x` from 0 to 1. For C-MTP, we vary fraction of spans while for CoT we vary fraction of tokens. We use greedy decoding for simplicity.
+
+All generations are written to `assets/generations/`, where you can find existing results stored.
+
+All three scripts are configured by the globals at the top of each file. The checkpoints are the released ones (see the top-level README):
+
+| Setting | `COT_FORMAT` | `CKPT_DIR` (`MODE`) | `DATASET` |
+|---|---|---|---|
+| NL | `nl` | `cot/seminatural_llama_lora` (`cot`), `cmtp/seminatural_llama_sp{2,3,4}mtp` (`mtp`) | `gsm8k-test` |
+| Structured | `structured` | `cmtp/structured_llama_sp{2,3,4}mtp` (`mtp`) | `assets/generations/cot_lora_exp_correct_generations_{gsm8k-test,svamp}.json` |
+
+`SPAN_LENGTH` must match the C-MTP checkpoint. The NL results come from the GSM8k-test gold traces. For the structured setting, the gold traces are the structured CoT model's own correct generations, so CoT accuracy is 1.0 by construction. 
+
+1. **Structured gold traces** (structured setting only). Set `COT_CKPT_DIR` to `cot/structured_llama_lora` and `DATASET` to `gsm8k-test` or `svamp`:
+
+   ```bash
+   python misc/generate_cot_traces.py
+   ```
+
+   This writes `assets/generations/cot_lora_exp_correct_generations_{dataset}.json`.
+
+2. **Prefill sweep.** Run once per row of the table above:
+
+   ```bash
+   python misc/gold_trace_analysis.py
+   ```
+
+   This writes `assets/generations/gold_trace_{mode}_{format}_sp{span}_{dataset}.json`, containing `x_values`, `accuracy` and the run config.
+
+3. **Plots and table.** Run:
+
+   ```bash
+   python misc/plot_gold_trace.py
+   ```
+
+   This writes `gold_trace_plot_{nl_gsm8k,structured_gsm8k,structured_svamp}.png` and `table.md` (accuracy % per `x`) to `assets/generations/`.

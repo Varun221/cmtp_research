@@ -13,6 +13,10 @@ export WANDB_ENTITY="vy2142-new-york-university"
 export WANDB_MODE="online"
 export WANDB_PROJECT="latentexps"
 
+# LLM-trace GSM8k-Aug (data prepared via data_math/gsm_process.py):
+# Llama: --data_name gsmllama, --max_token_num 768
+# 206,701 train samples; --num_train_epochs 4 / 5 / 5 for codi6 / codi10 / codi20.
+
 EXPNAME=l1b_codi6
 
 python train.py \

@@ -1,0 +1,52 @@
+{
+  "config": {
+    "mode": "mtp",
+    "cot_format": "nl",
+    "span_length": 2,
+    "ckpt_dir": "/scratch/vy2142/simplecontar/exps/spanlength2_nl_lora_initcot_mtpproj/job_192236_150326",
+    "model_name_or_path": "meta-llama/Llama-3.2-1B-Instruct",
+    "dataset": "gsm8k-test",
+    "num_samples": 1319,
+    "greedy": true,
+    "sample_mtp": false
+  },
+  "x_values": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "accuracy": [
+    0.44579226686884005,
+    0.4564063684609553,
+    0.4200151630022744,
+    0.42077331311599697,
+    0.4397270659590599,
+    0.49052312357846856,
+    0.5193328278999242,
+    0.5966641394996209,
+    0.6611068991660348,
+    0.7149355572403336,
+    0.9438968915845337
+  ],
+  "n_filled": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1319
+  ]
+}

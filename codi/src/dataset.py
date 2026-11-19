@@ -52,6 +52,10 @@ DATA_PATHS = {
         "train": "/scratch/vy2142/cmtp_research/data_store/math/llama_train_correct.json",
         "eval": "/scratch/vy2142/cmtp_research/data_store/math/llama_test.json",
     },
+    "gsmllama": {
+        "train": "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_train_correct.json",
+        "eval": "/scratch/vy2142/cmtp_research/data_store/gsmllm/llama_val.json",
+    },
 }
 
 
@@ -314,7 +318,7 @@ class SupervisedDataset(Dataset):
                 cots.append(" ".join(cot))
                 answers.append(answer)
 
-            elif "math" in self.data_name:
+            elif "math" in self.data_name or "gsmllama" in self.data_name:
 
                 # bad data
                 if example["answer"] is None:

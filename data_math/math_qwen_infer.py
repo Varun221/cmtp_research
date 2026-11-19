@@ -14,8 +14,6 @@ from transformers import AutoTokenizer
 
 from math_grader import grade_answer
 
-NUM_TIMES = 5
-
 MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
 DATA_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -30,9 +28,9 @@ SYSTEM_PROMPT = (
 )
 
 
-def load_data(path: str):
+def load_data(path: str, max_limit: int | None = None):
     with open(path) as f:
-        data = json.load(f)
+        data = json.load(f)[:max_limit]
     return data
 
 
@@ -88,6 +86,8 @@ def main():
     parser.add_argument("--one-prompt", action="store_true")
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument("--num-times", type=int, default=5, help="Number of sampling runs")
+    parser.add_argument("--max-limit", type=int, default=None, help="Max number of samples to load from data")
     parser.add_argument("--output", default=None, help="Path to save results JSON")
     args = parser.parse_args()
 
@@ -113,7 +113,7 @@ def main():
     )
 
     print(f"Loading data: {args.data}")
-    data = load_data(args.data)
+    data = load_data(args.data, max_limit=args.max_limit)
     print(f"Samples: {len(data)}")
 
     prompts = [build_prompt(tokenizer, item["question"]) for item in data]
@@ -122,8 +122,8 @@ def main():
     all_token_lengths = []
     results = None
 
-    for run_idx in range(NUM_TIMES):
-        print(f"\nRun {run_idx + 1}/{NUM_TIMES} — running inference...")
+    for run_idx in range(args.num_times):
+        print(f"\nRun {run_idx + 1}/{args.num_times} — running inference...")
         raw_outputs = llm.generate(prompts, sampling_params)
 
         correct = 0
@@ -158,7 +158,7 @@ def main():
     len_mean = np.mean(all_token_lengths)
     len_std = np.std(all_token_lengths)
 
-    print(f"\n=== Results over {NUM_TIMES} run(s) x {len(data)} samples ===")
+    print(f"\n=== Results over {args.num_times} run(s) x {len(data)} samples ===")
     print(f"Accuracy:     {acc_mean:.2f}% ± {acc_std:.2f}%")
     print(f"Token length: {len_mean:.1f} ± {len_std:.1f}")
 

@@ -22,9 +22,13 @@ export WANDB_PROJECT=""
 # Use `mathllama` data_name
 # batch size = 32, grad accum = 2 
 
-# Model: Qwen/Qwen2.5-1.5B-Instruct 
+# Model: Qwen/Qwen2.5-1.5B-Instruct
 # Use `mathqwen` data_name
 # batch size = 16, grad accum = 4
+
+# LLM-trace GSM8k-Aug (data prepared via data_math/gsm_process.py), Llama only:
+# --data_name gsmllama, --max_token_num 768
+# 206,701 train samples.
 
 
 python train.py \

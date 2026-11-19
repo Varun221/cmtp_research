@@ -1,4 +1,27 @@
-"""Time the forward pass of TrainingModel for different sequence lengths."""
+"""Time the forward+backward pass of TrainingModel for different sequence lengths.
+
+BATCH_SIZE and SEQ_LENGTHS are set at the top of the timing loop. codi_ms below
+comes from codi/src/timing.py run with the same settings; speedup = codi_ms / cmtp_ms.
+Measured on one H200 with Llama-3.2-1B-Instruct, SPAN_LENGTH=4 vs 6 CODI latents,
+mean over 20 trials after 5 warmup iterations.
+
+Output:
+     batch  seq_len    cmtp_ms    codi_ms   speedup
+        16       32     161.30     639.81      3.97
+        16       64     179.92     633.37      3.52
+        16       96     199.02     637.82      3.20
+        16      128     225.62     635.21      2.82
+        -------------------------------------------
+        32       32     175.18     610.00      3.48
+        32       64     224.79     615.10      2.74
+        32       96     290.19     623.80      2.15
+        32      128     381.28     661.60      1.74
+        -------------------------------------------
+        64       32     228.95     660.58      2.89
+        64       64     386.14     705.59      1.83
+        64       96     544.23     791.40      1.45
+        64      128     722.30     880.25      1.22
+"""
 
 import sys
 import os
@@ -20,8 +43,8 @@ SPAN_LENGTH = 4
 
 # Setup Args
 model_args = ModelArguments(
-    # model_name_or_path="meta-llama/Llama-3.2-3B-Instruct",
-    model_name_or_path="Qwen/Qwen2.5-1.5B-Instruct",
+    model_name_or_path="meta-llama/Llama-3.2-1B-Instruct",
+    # model_name_or_path="Qwen/Qwen2.5-1.5B-Instruct",
     lora_r=128,
     lora_alpha=32,
     lora_init=True,
@@ -38,8 +61,9 @@ training_args = TrainingArguments(
     textcot_teacher_ckpt="",
     init_student_with_teacher=False,  # no checkpoint for timing
     span_length=SPAN_LENGTH,
-    separate_mtp_projections=True,
     compile_forward=False,
+    multitask_training=True,
+    no_init_teacher=True
 )
 
 lora_config = LoraConfig(
@@ -71,7 +95,7 @@ eot_id = model.eot_id
 mot_id = model.mot_id
 
 # Config params. See paper for exact setup.
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 SEQ_LENGTHS = [
     180,
 ]

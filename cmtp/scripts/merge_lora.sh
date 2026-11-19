@@ -2,6 +2,9 @@
 
 cd /scratch/vy2142/cmtp_research/cmtp
 
+# For LLM-trace GSM8k-Aug warmstart teachers, run the same flow with
+# --data_name gsmllama and --start_state set to the GSM CoT LoRA ckpt.
+# Multitask C-MTP mode needs no teacher, so no merge is required there.
 
 # Merging Qwen-Math CoT
 

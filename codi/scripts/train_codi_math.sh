@@ -14,8 +14,12 @@ export WANDB_PROJECT=""
 # Model: meta-llama/Llama-3.2-1B-Instruct 
 # Use `mathllama` data_name
 
-# Model: Qwen/Qwen2.5-1.5B-Instruct 
+# Model: Qwen/Qwen2.5-1.5B-Instruct
 # Use `mathqwen` data_name
+
+# LLM-trace GSM8k-Aug (data prepared via data_math/gsm_process.py), Llama only:
+# --data_name gsmllama, --max_token_num 768
+# 206,701 train samples.
 
 EXPNAME=l1bmath_codi20
 
